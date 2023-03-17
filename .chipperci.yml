@@ -1,0 +1,21 @@
+version: 1
+
+environment:
+  php: 8.2
+  node: 10
+
+pipeline:
+  - name: Setup
+    cmd: |
+      cp -v .env.example .env
+      composer install --no-interaction --prefer-dist --optimize-autoloader
+      php artisan key:generate
+
+  - name: Fake Some Screenshots
+    cmd: |
+      mkdir -p tests/Browser/screenshots
+      touch tests/Browser/screenshots/foo.png
+      echo "barbaz" > tests/Browser/screenshots/foo.png
+
+  - name: Run Tests
+    cmd: phpunit
